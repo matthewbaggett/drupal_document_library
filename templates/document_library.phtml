@@ -1,0 +1,60 @@
+<div class="documents">
+<?php 
+// Show File Attachments to this question
+$header = array();
+$header[] = t('File name');
+if(document_library_check_permission('version control')){
+	$header[] = t('Version');
+}
+$header[] = t('User');
+$header[] = t('Mimetype');
+$header[] = t('Last update');
+$header[] = array(
+		'data' => t('Operations'),
+		'colspan' => document_library_check_permission('delete documents')?'2':'1'
+);
+
+$rows = array();
+foreach ($documents as $document) {
+	$row = array();
+	
+	$row[] = l($document->filename, $document->get_file_path());
+	if(document_library_check_permission('version control')){
+		$row[] = $document->version;
+	}
+	$row[] = $document->get_user()->name;
+	
+	$row[] = $document->mimetype;
+	$row[] = t("@date (@ago) by @author", array(
+					'@date' => date("Y/m/d",strtotime($document->created_date)),
+					'@ago' => format_interval(strtotime($document->created_date) - REQUEST_TIME),
+					'@author' => $document->get_created_user()->name
+	));
+	$row[] = l(t("Download"), $document->get_file_path());
+	if(document_library_check_permission('delete documents')){
+		$row[] = l(t('Delete'), "document_library/{$document->get_slug()}/delete");
+	}
+
+	$rows[] = $row;
+}
+echo theme('table', array('header' => $header, 'rows' => $rows, 'empty' => t('No documents available.')));
+?>
+</div>
+
+<form action="" method="POST" enctype="multipart/form-data">
+	<fieldset>
+		<legend>
+			<div class="fieldset-legend"><?=t("Attach document:");?></div>
+		</legend>
+		<div class="fieldset-wrapper">
+			<div class="form-item form-type-file">
+				<label><?=t("Document")?>:</label>
+				<input type="file" class="form-file" size="48" name="document">
+				<div class="description"><?=t("A document that you wish to share.");?></div>
+			</div>
+		</div>
+	</fieldset>
+	<div class="form-actions" id="edit-actions">
+		<input type="submit" id="edit-submit" name="op" value="Upload" class="form-submit">
+	</div>
+</form>

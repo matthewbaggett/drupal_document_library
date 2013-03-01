@@ -1,0 +1,7 @@
+name = Document Library
+description = Simple library system for uploading content to and sharing with users.
+package = Custom
+core = 7.x
+dependencies[] = active_record
+stylesheets[all][] = document_library.css
+

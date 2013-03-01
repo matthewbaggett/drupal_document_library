@@ -1,0 +1,28 @@
+<?php 
+
+function document_library_install(){
+	db_query("
+		CREATE TABLE {document_library_files} (
+			`fid` int(11) NOT NULL AUTO_INCREMENT,
+			`version` int(11) NOT NULL,
+			`module` varchar(255) NOT NULL,
+			`type` varchar(255) NOT NULL,
+			`associated_id` int(11) NOT NULL,
+			`filename` text NOT NULL,
+			`data` longblob,
+			`mimetype` varchar(32) NOT NULL,
+			`size` int(11) NOT NULL,
+			`uid` int(11) NOT NULL,
+			`created_date` datetime NOT NULL,
+			`created_uid` int(11) NOT NULL,
+			`deleted` enum('Yes','No') NOT NULL DEFAULT 'No',
+			PRIMARY KEY (`fid`, `version`)
+		) 	ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+	");
+	drupal_set_message("Installed Document Library!");
+}
+
+function document_library_uninstall() {
+	db_query('DROP TABLE {document_library_files}');
+	drupal_set_message("Unstalled Document Library..");
+}

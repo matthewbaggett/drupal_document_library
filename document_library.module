@@ -120,3 +120,20 @@ function document_library_template_view($file, $view = null){
 	ob_end_clean();
 	return $markup;
 }
+
+function _document_library_humanise_mimetype($mimetype){
+	$mime_section = explode("/",$mimetype,2);
+	switch($mime_section[0]){
+		case 'image':
+			return "Image";
+		case 'application':
+			switch($mime_section[1]){
+				case 'vnd.ms-excel':
+					return "Spreadsheet";
+			}
+		case 'text':
+			return "Text Document";
+		default:
+			return $mimetype;
+	}
+}

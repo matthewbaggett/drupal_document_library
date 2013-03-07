@@ -1,0 +1,17 @@
+a.delete,
+a.download{
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 33px;
+	height: 33px;
+	float:left; 
+	display: block;
+}
+
+a.delete{ 		background-image: url("./icons/trash.png"); 	width: 19px;	}
+a.download{		background-image: url("./icons/download.png"); 	width: 22px;	}
+
+a.delete span,
+a.download span{
+	display: none;
+}

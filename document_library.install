@@ -26,3 +26,11 @@ function document_library_uninstall() {
 	db_query('DROP TABLE {document_library_files}');
 	drupal_set_message("Unstalled Document Library..");
 }
+
+/**
+ * Add description to document library files.
+ */
+function document_library_update_7000(){
+	db_query('ALTER TABLE  {document_library_files} ADD  `description` TEXT NOT NULL AFTER  `filename`');
+	
+}

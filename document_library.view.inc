@@ -1,25 +1,35 @@
 <?php 
 function document_library_view(){
-	if(count($_POST)){
-		$document = new document();
-		$document->module 			= "document_library";
-		$document->type 			= "document";
-		$document->associated_id 	= -1;
-		$document->filename 		= $_FILES['document']['name'];
-		$document->data 			= file_get_contents($_FILES['document']['tmp_name']);
-		$document->mimetype 		= $_FILES['document']['type'];
-		$document->size 			= $_FILES['document']['size'];
-		$document->uid				= $GLOBALS['user']->uid;
-		$document->save();
-		$document->reload();
-		$fid = $document->get_id();
-		drupal_set_message("Uploaded {$document->filename}");
-		drupal_goto("document_library");
+	if(document_library_check_permission('create documents')){
+		if(count($_POST)){
+			$document = new document();
+			$document->module 			= "document_library";
+			$document->type 			= "document";
+			$document->associated_id 	= -1;
+			$document->filename 		= $_FILES['document']['name'];
+			$document->description 		= $_POST['description'];
+			$document->data 			= file_get_contents($_FILES['document']['tmp_name']);
+			$document->mimetype 		= $_FILES['document']['type'];
+			$document->size 			= $_FILES['document']['size'];
+			$document->uid				= $GLOBALS['user']->uid;
+			$document->save();
+			$document->reload();
+			$fid = $document->get_id();
+			drupal_set_message("Uploaded {$document->filename}");
+			drupal_goto("document_library");
+		}
 	}
 	$view = new StdClass();
 	$view->documents = document::search()
 						->order('filename', 'ASC')
 						->exec();
+	
+	// Build Breadcrumbs
+	$breadcrumb = array();
+	$breadcrumb[] = l(t('Home'), '<front>');
+	$breadcrumb[] = l(t('Document Library'), 'document_library');
+	drupal_set_breadcrumb($breadcrumb);
+	
 	$output = document_library_template_view(DOCUMENT_LIBRARY_ROOT_PATH . "/templates/document_library.phtml", $view);
 	return $output;
 }

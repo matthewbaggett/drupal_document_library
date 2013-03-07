@@ -1,4 +1,6 @@
 <?php 
+require_once(DRUPAL_ROOT . "/" . drupal_get_path('module', 'active_record') . "/lib/versioned_active_record.php");
+
 class document extends versioned_active_record{
 	protected $_table = "document_library_files";
 	protected $_cfg_deleteable	= true;

@@ -32,5 +32,11 @@ function document_library_uninstall() {
  */
 function document_library_update_7000(){
 	db_query('ALTER TABLE  {document_library_files} ADD  `description` TEXT NOT NULL AFTER  `filename`');
-	
+}
+
+/**
+ * Mimetype apparently can be humongous. Thanks Microsoft. application/vnd.openxmlformats-officedocument.spreadsheetml.sheet is just fantastic.
+ */
+function document_library_update_7001(){
+	db_query('ALTER TABLE  {document_library_files} CHANGE  `mimetype`  `mimetype` VARCHAR( 320 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL');
 }

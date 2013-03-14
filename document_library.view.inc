@@ -3,15 +3,21 @@ function document_library_view(){
 	if(document_library_check_permission('create documents')){
 		if(count($_POST)){
 			$document = new document();
-			$document->module 			= "document_library";
-			$document->type 			= "document";
+			$document->module 			  = "document_library";
+			$document->type 			    = "document";
 			$document->associated_id 	= -1;
-			$document->filename 		= $_FILES['document']['name'];
+			$document->filename 		  = $_FILES['document']['name'];
 			$document->description 		= $_POST['description'];
-			$document->data 			= file_get_contents($_FILES['document']['tmp_name']);
-			$document->mimetype 		= $_FILES['document']['type'];
-			$document->size 			= $_FILES['document']['size'];
-			$document->uid				= $GLOBALS['user']->uid;
+			$document->mimetype 		  = $_FILES['document']['type'];
+			$document->size 			    = $_FILES['document']['size'];
+			$document->uid				    = $GLOBALS['user']->uid;
+
+			// Encode the data before saving
+			$data = file_get_contents($_FILES['document']['tmp_name']);
+			$data = base64_encode($data);
+			$document->data 			    = $data;
+
+			// Call save.
 			$document->save();
 			$document->reload();
 			$fid = $document->get_id();

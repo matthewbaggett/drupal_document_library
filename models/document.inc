@@ -13,7 +13,7 @@ class document extends versioned_active_record{
 	 */
 	public function get_user(){
 		if(!$this->_user){
-			$this->_user = user_active_record::search()->where('uid',$this->uid)->execOne();
+			$this->_user = user_active_record::search()->where('uid', $this->uid)->execOne();
 		}
 		return $this->_user;
 	}

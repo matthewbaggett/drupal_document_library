@@ -11,6 +11,8 @@ function document_library_view(){
 			$document->mimetype 		  = $_FILES['document']['type'];
 			$document->size 			    = $_FILES['document']['size'];
 			$document->uid				    = $GLOBALS['user']->uid;
+      $document->sticky         = $_POST['sticky'] == "Yes" ? "Yes" : "No";
+
 
 			// Encode the data before saving
 			$data = file_get_contents($_FILES['document']['tmp_name']);
@@ -27,7 +29,8 @@ function document_library_view(){
 	}
 	$view = new StdClass();
 	$view->documents = document::search()
-						->order('filename', 'ASC')
+            ->order("sticky", "DESC")
+						->order('created_date', 'DESC')
 						->exec();
 	
 	// Build Breadcrumbs

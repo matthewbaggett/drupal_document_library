@@ -29,4 +29,33 @@ class document extends versioned_active_record{
 	public function get_slug(){
 		return "{$this->fid}-{$this->filename_slug()}";
 	}
+
+  /**
+   * Is this Document sticky?
+   *
+   * @return bool
+   */
+  public function is_sticky(){
+    return $this->sticky=="Yes" ? true : false;
+  }
+
+  /**
+   * Set this Document to sticky. Has Implicit save.
+   * @return document
+   */
+  public function set_sticky(){
+    $this->sticky = "Yes";
+    $this->save();
+    return $this;
+  }
+
+  /**
+   * Set this Document to not sticky. Has Implicit save.
+   * @return document
+   */
+  public function set_not_sticky(){
+    $this->sticky = "No";
+    $this->save();
+    return $this;
+  }
 }
